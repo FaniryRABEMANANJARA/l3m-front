@@ -14,7 +14,7 @@ interface User {
   email: string;
 }
 
-const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) => {
+const Sidebar = ({ isOpen }: { isOpen: boolean; }) => {
     const dispatch = useDispatch();
     const router = useRouter();
   

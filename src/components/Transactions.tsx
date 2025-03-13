@@ -79,7 +79,7 @@ const Transactions = ({closeTransactionModal }) => {
   const [selectedUser, setSelectedUser] = useState("");
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [showTransactionModal, setShowTransactionModal] = useState<boolean>(false);
   const [transactionAmount, setTransactionAmount] = useState("");
   const [transactionType, setTransactionType] = useState("credit");
   const [error, setError] = useState(null);
@@ -307,76 +307,76 @@ const Transactions = ({closeTransactionModal }) => {
               </table>
             )}
           </div>
-          {showTransactionModal && (
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-              onClick={closeTransactionModal}
-            >
+            {showTransactionModal && (
               <div
-                className="bg-white p-6 rounded-lg shadow-lg max-w-md"
-                onClick={(e) => e.stopPropagation()}
+                className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+                onClick={closeTransactionModal}
               >
-                <h2 className="text-xl font-semibold mb-4">
-                  Faire une Transaction
-                </h2>
-                <form onSubmit={handleTransactionSubmit}>
-                  <div className="mb-4">
-                    <label className="block mb-2">Montant</label>
-                    <input
-                      type="number"
-                      className="w-full p-2 border border-gray-300 rounded"
-                      value={transactionAmount}
-                      onChange={(e) => setTransactionAmount(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block mb-2">Type de transaction</label>
-                    <select
-                      value={transactionType}
-                      onChange={(e) => setTransactionType(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    >
-                      <option value="credit">Crédit</option>
-                      <option value="debit">Débit</option>
-                    </select>
-                  </div>
-                  <div className="mb-4">
-                    <label className="block mb-2">Utilisateur</label>
-                    <select
-                      className="w-full p-2 border rounded"
-                      value={selectedUser} // Ajouter la valeur actuelle
-                      onChange={(e) => setSelectedUser(e.target.value)} // Ajouter onChange
-                    >
-                      <option value="">Sélectionner un utilisateur</option>
-                      {users.map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.name}
-                        </option>
-                      ))}
-                    </select>
-     
-                  </div>
-                  {error && <ErrorMessage message={error} />}
-                  <div className="flex justify-between">
-                    <button
-                      type="button"
-                      onClick={closeTransactionModal}
-                      className="bg-gray-500 text-white px-4 py-2 rounded"
-                    >
-                      Annuler
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-blue-600 text-white px-4 py-2 rounded"
-                    >
-                      Confirmer
-                    </button>
-                  </div>
-                </form>
+                <div
+                  className="bg-white p-6 rounded-lg shadow-lg max-w-md"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Faire une Transaction
+                  </h2>
+                  <form onSubmit={handleTransactionSubmit}>
+                    <div className="mb-4">
+                      <label className="block mb-2">Montant</label>
+                      <input
+                        type="number"
+                        className="w-full p-2 border border-gray-300 rounded"
+                        value={transactionAmount}
+                        onChange={(e) => setTransactionAmount(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-2">Type de transaction</label>
+                      <select
+                        value={transactionType}
+                        onChange={(e) => setTransactionType(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      >
+                        <option value="credit">Crédit</option>
+                        <option value="debit">Débit</option>
+                      </select>
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-2">Utilisateur</label>
+                      <select
+                        className="w-full p-2 border rounded"
+                        value={selectedUser} // Ajouter la valeur actuelle
+                        onChange={(e) => setSelectedUser(e.target.value)} // Ajouter onChange
+                      >
+                        <option value="">Sélectionner un utilisateur</option>
+                        {users.map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.name}
+                          </option>
+                        ))}
+                      </select>
+      
+                    </div>
+                    {error && <ErrorMessage message={error} />}
+                    <div className="flex justify-between">
+                      <button
+                        type="button"
+                        onClick={() => setShowTransactionModal(false)}
+                        className="bg-gray-500 text-white px-4 py-2 rounded"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        type="submit"
+                        className="bg-blue-600 text-white px-4 py-2 rounded"
+                      >
+                        Confirmer
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </main>
          <Footer />
       </div>
