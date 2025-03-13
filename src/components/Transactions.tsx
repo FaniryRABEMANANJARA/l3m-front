@@ -24,10 +24,9 @@ import Loader from "./Loader";
 
 const Sidebar = ({
   isOpen,
-  toggleSidebar,
+
 }: {
   isOpen: boolean;
-  toggleSidebar: () => void;
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -381,7 +380,7 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
             </div>
           )}
         </main>
-        <Footer />
+         <Footer />
       </div>
      
     </div>

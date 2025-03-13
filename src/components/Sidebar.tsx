@@ -6,10 +6,9 @@ import React from 'react';
 
 interface SidebarProps {
   isOpen: boolean;
-  toggleSidebar: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   return (
     <aside
       className={`bg-gray-900 text-white w-64 min-h-screen p-4 transition-all ${
