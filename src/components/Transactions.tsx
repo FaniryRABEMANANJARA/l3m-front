@@ -5,6 +5,7 @@ import {
   faCheckCircle,
   faListAlt,
   faSignOutAlt,
+  faTachometerAlt,
   faTimesCircle,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearAuth } from "../store/authSlice";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
+
 
 
 const Sidebar = ({
@@ -44,6 +46,11 @@ const Sidebar = ({
       } md:block`}
     >
       <ul className="space-y-4">
+      <li>
+                    <Link href="/dashboard" className="flex items-center p-3 hover:bg-gray-700 rounded">
+                        <FontAwesomeIcon icon={faTachometerAlt} className="mr-3" /> Dashboard
+                    </Link>
+                </li>
         <li>
           <Link
             href="/transactions"
