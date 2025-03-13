@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Next.js pour L3m-holding
 
-## Getting Started
+Ce projet est un frontend Next.js pour l'application L3m-holding. Il permet aux utilisateurs de gérer leurs transactions et de consulter leur profil.
 
-First, run the development server:
+## Prérequis
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* Node.js (version 18 ou supérieure)
+* npm ou yarn
+* Un backend Laravel fonctionnel (avec une API REST)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  Clonez le dépôt :
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    ```bash
+    git clone <[URL_DU_DÉPÔT](https://github.com/FaniryRABEMANANJARA/l3m-front.git)>
+    cd <cd frontend-nextjs>
+    ```
 
-## Learn More
+2.  Installez les dépendances :
 
-To learn more about Next.js, take a look at the following resources:
+    ```bash
+    npm install
+    # ou
+    yarn install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3.  Configurez les variables d'environnement :
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    * Créez un fichier `.env.local` à la racine du projet.
+    * Ajoutez la variable `NEXT_PUBLIC_LARAVEL_API_ENDPOINT` avec l'URL de votre API Laravel :
 
-## Deploy on Vercel
+        ```
+        NEXT_PUBLIC_LARAVEL_API_ENDPOINT=[http://http://127.0.0.1:8000/api]
+        ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4.  Démarrez le serveur de développement :
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    ```bash
+    npm run dev
+    # ou
+    yarn dev
+    ```
+
+    L'application sera accessible à l'adresse `http://localhost:3000`.
+
+## Structure du projet
