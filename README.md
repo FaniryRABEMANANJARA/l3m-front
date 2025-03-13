@@ -13,7 +13,7 @@ Ce projet est un frontend Next.js pour l'application L3m-holding. Il permet aux 
 1.  Clonez le dépôt :
 
     ```bash
-    git clone <[URL_DU_DÉPÔT](https://github.com/FaniryRABEMANANJARA/l3m-front.git)>
+    git clone <(https://github.com/FaniryRABEMANANJARA/l3m-front.git)>
     cd <cd frontend-nextjs>
     ```
 
