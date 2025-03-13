@@ -209,7 +209,6 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
      
       <Sidebar
         isOpen={sidebarOpen}
-        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
       />
 
       <div className="flex-1 flex flex-col">
