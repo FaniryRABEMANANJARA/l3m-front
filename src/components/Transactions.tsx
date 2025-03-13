@@ -24,7 +24,6 @@ import Loader from "./Loader";
 
 const Sidebar = ({
   isOpen,
-
 }: {
   isOpen: boolean;
 }) => {
@@ -75,7 +74,7 @@ const Sidebar = ({
   );
 };
 
-const Transactions = ({ isOpen, closeTransactionModal }) => {
+const Transactions = ({closeTransactionModal }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [transactions, setTransactions] = useState([]);
