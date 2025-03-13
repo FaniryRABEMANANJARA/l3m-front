@@ -1,4 +1,4 @@
-import { faBars, faListAlt, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faListAlt, faSignOutAlt, faTachometerAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -29,7 +29,11 @@ const Sidebar = ({ isOpen }: { isOpen: boolean; }) => {
     return (
       <aside className={`bg-gray-900 text-white w-64 min-h-screen p-4 transition-all ${isOpen ? 'block' : 'hidden'} md:block`}>
         <ul className="space-y-4">
-          <li>
+        <li>
+                    <Link href="/dashboard" className="flex items-center p-3 hover:bg-gray-700 rounded">
+                        <FontAwesomeIcon icon={faTachometerAlt} className="mr-3" /> Dashboard
+                    </Link>
+                </li>  <li>
             <Link href="/transactions" className="flex items-center p-3 hover:bg-gray-700 rounded">
               <FontAwesomeIcon icon={faListAlt} className="mr-3" /> Transactions
             </Link>
