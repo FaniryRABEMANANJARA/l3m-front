@@ -59,8 +59,8 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>('');
     const [newEmail, setNewEmail] = useState<string>('');
-    const token = useSelector((state: any) => state.auth.token);
-    const userId = useSelector((state: any) => state.auth.user?.id);
+    const token = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.token);
+    const userId = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.user?.id);
     const router = useRouter();
   
     useEffect(() => {
@@ -83,7 +83,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
           setUser(data);
           setNewName(data.name);
           setNewEmail(data.email);
-        } catch (err: any) {
+        } catch (err: React.MouseEvent<HTMLButtonElement>) {
           setError(err.message || 'Erreur de connexion');
         } finally {
           setLoading(false);
@@ -118,7 +118,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
         const updatedUser = await response.json();
         setUser(updatedUser);
         setModalOpen(false); // Fermer la modal après sauvegarde
-      } catch (err: any) {
+      } catch (err: React.MouseEvent<HTMLButtonElement>) {
         setError(err.message || 'Erreur lors de la mise à jour');
       }
     };

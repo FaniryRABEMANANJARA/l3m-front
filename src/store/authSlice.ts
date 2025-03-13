@@ -22,7 +22,7 @@ const authSlice = createSlice({
       state.token = action.payload;
       state.error = null;
     },
-    setUser: (state, action: PayloadAction<any>) => {
+    setUser: (state, action: PayloadAction<React.MouseEvent<HTMLButtonElement>>) => {
       state.user = action.payload;
       state.error = null;
     },

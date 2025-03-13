@@ -1,13 +1,13 @@
-// src/app/register/page.tsx
+
 'use client';
 
-import RegisterForm from '@/components/RegisterForm'; // Importez RegisterForm
+import RegisterForm from '@/components/RegisterForm';
 import store from '@/store';
 import { Provider } from 'react-redux';
 
 const RegisterPage = () => (
   <Provider store={store}>
-    <RegisterForm /> // Utilisez RegisterForm
+    <RegisterForm /> 
   </Provider>
 );
 

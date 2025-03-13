@@ -1,4 +1,5 @@
 "use client";
+import Footer from '@/components/Footer';
 import {
   faBars,
   faCheckCircle,
@@ -380,7 +381,9 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
             </div>
           )}
         </main>
+        <Footer />
       </div>
+     
     </div>
   );
 };

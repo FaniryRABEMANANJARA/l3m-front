@@ -13,7 +13,7 @@ const LoginForm = () => {
     const router = useRouter();
 
     // Récupérer l'erreur depuis le store
-    const errorMessage = useSelector((state: any) => state.auth.error);
+    const errorMessage = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.error);
 
     useEffect(() => {
         document.querySelector<HTMLInputElement>('input[type="email"]')?.focus();
@@ -73,7 +73,7 @@ const LoginForm = () => {
                 }
                 dispatch(setError(errorMessage));
             }
-        } catch (error: any) {
+        } catch (error: React.MouseEvent<HTMLButtonElement>) {
             dispatch(setError(error.message || 'Erreur de connexion'));
         } finally {
             setLoading(false);
