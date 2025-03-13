@@ -273,7 +273,7 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
                         {format(parseISO(transaction.created_at), "dd-MM-yyyy")}
                       </td>
                       <td className="p-3">
-                        {transaction.status === "success" ? (
+                        {transaction.statut === "completed" ? (
                           <span className="text-green-500 flex items-center">
                             <FontAwesomeIcon
                               icon={faCheckCircle}
@@ -286,7 +286,7 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
                             <FontAwesomeIcon
                               icon={faTimesCircle}
                               className="mr-2"
-                            />{" "}
+                            />{""}
                             Échouée
                           </span>
                         )}
