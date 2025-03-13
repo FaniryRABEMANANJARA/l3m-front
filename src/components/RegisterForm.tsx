@@ -20,7 +20,7 @@ const RegisterForm = () => {
     const errorMessage = useSelector((state: any) => state.auth.error);
 
     useEffect(() => {
-        document.querySelector<HTMLInputElement>('input[type="text"]')?.focus(); // Focus sur le champ nom au chargement
+        document.querySelector<HTMLInputElement>('input[type="text"]')?.focus(); 
     },);
 
     const validateForm = (): boolean => {
@@ -138,7 +138,7 @@ const RegisterForm = () => {
                                 required
                             />
                         </div>
-                        {/* Affichage de l'erreur s'il y en a */}
+                      
                         {errorMessage && (
                             <div className="alert alert-danger text-center">{errorMessage}</div>
                         )}

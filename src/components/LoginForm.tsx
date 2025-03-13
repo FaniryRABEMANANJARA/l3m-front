@@ -108,7 +108,7 @@ const LoginForm = () => {
                                 required
                             />
                         </div>
-                        {/* Affichage de l'erreur s'il y en a */}
+                    
                         {errorMessage && (
                             <div className="alert alert-danger text-center">{errorMessage}</div>
                         )}

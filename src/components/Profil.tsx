@@ -142,11 +142,11 @@ const Profil: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
+     
       <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
       <div className="flex-1 flex flex-col">
-        {/* Navbar */}
+      
         <nav className="bg-white shadow-md p-4 flex justify-between items-center">
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden text-gray-700">
             <FontAwesomeIcon icon={faBars} size="lg" />
@@ -173,7 +173,7 @@ const Profil: React.FC = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
               <p className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{user.email}</p>
             </div>
-            {/* Button to open modal */}
+           
             <button
               onClick={() => setModalOpen(true)}
               className="w-full bg-blue-600 text-white p-2 rounded mt-4 hover:bg-blue-700"

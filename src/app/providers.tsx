@@ -20,7 +20,7 @@ export default function RootLayout({
     return (
         <html lang="fr">
             <body className={inter.className}>
-                <Provider store={store}> {/* Enveloppez l'application avec Provider */}
+                <Provider store={store}>
                    
                     <main>{children}</main>
                    
