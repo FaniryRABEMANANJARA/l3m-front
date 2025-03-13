@@ -206,14 +206,14 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
+     
       <Sidebar
         isOpen={sidebarOpen}
         toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
       />
 
       <div className="flex-1 flex flex-col">
-        {/* Navbar */}
+     
         <nav className="bg-white shadow-md p-4 flex justify-between items-center">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -233,7 +233,7 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
           </div>
         </nav>
 
-        {/* Contenu principal */}
+      
         <main className="p-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -309,8 +309,6 @@ const Transactions = ({ isOpen, closeTransactionModal }) => {
               </table>
             )}
           </div>
-
-          {/* Modal pour ajouter une transaction */}
           {showTransactionModal && (
             <div
               className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
