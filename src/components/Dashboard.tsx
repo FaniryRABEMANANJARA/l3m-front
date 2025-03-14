@@ -126,7 +126,7 @@ interface ChartDataState extends ChartData<'line'> {
 const Dashboard = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]); // Typage de transactions
     const [chartData, setChartData] =useState<ChartDataState | null>(null);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const userId = useSelector((state: RootState) => state.auth.user?.id);
     const tableRef = useRef(null);
@@ -196,11 +196,11 @@ const Dashboard = () => {
             ],
           });
         })
-        .catch((error) => {
-          setError("Erreur de récupération des transactions");
-          console.error("Error fetching transactions:", error);
-        });
-    }, [userId]);
+         .catch((error) => {
+        setError("Erreur de récupération des transactions"); 
+        console.error("Error fetching transactions:", error);
+      });
+  }, [userId]);
   useEffect(() => {
     if (transactions.length > 0) {
       const table = tableRef.current;
