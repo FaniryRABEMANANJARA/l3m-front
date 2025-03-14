@@ -1,3 +1,5 @@
+'use client';
+
 import { setError, setToken, setUser } from '@/store/authSlice';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -25,7 +27,7 @@ const LoginForm = () => {
     const router = useRouter();
 
     // Utiliser le type défini pour accéder à l'erreur
-    const errorMessage = useSelector((state: RootState) => state.auth.error);  // Remplacez `any` par `RootState`
+    const errorMessage = useSelector((state: RootState) => state.auth.error);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -70,26 +72,29 @@ const LoginForm = () => {
                 }
             );
 
-            const data = await response.json();
-
-            if (response.ok) {
-                const token = data.access_token;
-                const user = data.user;
-
-                localStorage.setItem("token", token);
-                dispatch(setToken(token));
-                dispatch(setUser(user));
-
-                router.push("/transactions");
-            } else {
-                let errorMessage = "Erreur d'authentification";
-                if (data && data.message) {
-                    errorMessage = data.message;
-                }
-                dispatch(setError(errorMessage));
+            if (!response.ok) {
+                // Gestion des erreurs HTTP
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
             }
-        } catch (error: any) {
-            dispatch(setError(error.message || 'Erreur de connexion'));
+
+            const data = await response.json();
+            const token = data.access_token;
+            const user = data.user;
+
+            localStorage.setItem("token", token);
+            dispatch(setToken(token));
+            dispatch(setUser(user));
+
+            router.push("/transactions");
+
+        } catch (error) { // Type 'unknown' est plus sûr que 'any'
+            if (error instanceof Error) {
+                dispatch(setError(error.message || 'Erreur de connexion'));
+            } else {
+                dispatch(setError('Une erreur inconnue est survenue.'));
+            }
+
         } finally {
             setLoading(false);
         }
@@ -123,7 +128,7 @@ const LoginForm = () => {
                                 required
                             />
                         </div>
-                    
+
                         {errorMessage && (
                             <div className="alert alert-danger text-center">{errorMessage}</div>
                         )}
