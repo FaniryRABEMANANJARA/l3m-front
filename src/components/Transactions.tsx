@@ -81,7 +81,7 @@ const Sidebar = ({
   );
 };
 
-const Transactions = ({closeTransactionModal }) => {
+const Transactions: React.FC = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [transactions, setTransactions] = useState([]);
@@ -189,8 +189,7 @@ const Transactions = ({closeTransactionModal }) => {
   
       const result = await response.json();
       console.log("Transaction réussie :", result);
-  
-      closeTransactionModal();
+      setShowTransactionModal(false);
     } catch (error) {
       console.error(error);
       setError("Une erreur est survenue. Veuillez réessayer.");
@@ -317,8 +316,7 @@ const Transactions = ({closeTransactionModal }) => {
             {showTransactionModal && (
               <div
                 className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-                onClick={closeTransactionModal}
-              >
+                onClick={() => setShowTransactionModal(false)}             >
                 <div
                   className="bg-white p-6 rounded-lg shadow-lg max-w-md"
                   onClick={(e) => e.stopPropagation()}
@@ -375,6 +373,7 @@ const Transactions = ({closeTransactionModal }) => {
                       </button>
                       <button
                         type="submit"
+                        onClick={() => setShowTransactionModal(true)}
                         className="bg-blue-600 text-white px-4 py-2 rounded"
                       >
                         Confirmer

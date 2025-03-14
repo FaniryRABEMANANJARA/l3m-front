@@ -1,7 +1,6 @@
 import { setError, setToken, setUser } from '@/store/authSlice';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../app/globals.css';
 
@@ -12,12 +11,20 @@ const LoginForm = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    // Récupérer l'erreur depuis le store
-    const errorMessage = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.error);
+    // Récupérer l'erreur depuis le store Redux
+    const errorMessage = useSelector((state: any) => state.auth.error);  // Remplacez "any" par le type de votre RootState
 
     useEffect(() => {
+        // Vérifier si un token est déjà présent dans localStorage et l'utiliser
+        const token = localStorage.getItem('token');
+        if (token) {
+            dispatch(setToken(token));
+            // Ici, tu pourrais aussi récupérer et stocker les informations utilisateur, si nécessaire
+        }
+
+        // Mettre le focus sur le champ email à l'initialisation du formulaire
         document.querySelector<HTMLInputElement>('input[type="email"]')?.focus();
-    }, []);
+    }, [dispatch]);
 
     const validateForm = (): boolean => {
         if (!email) {
@@ -59,13 +66,13 @@ const LoginForm = () => {
                 const token = data.access_token;
                 const user = data.user;
 
-                Cookies.set('token', token, {
-                    secure: true,
-                    sameSite: 'strict',
-                });
+                // Stocker le token dans localStorage
+                localStorage.setItem("token", token);
                 dispatch(setToken(token));
                 dispatch(setUser(user));
-                router.push('/transactions');
+
+                // Rediriger vers la page des transactions
+                router.push("/transactions");
             } else {
                 let errorMessage = "Erreur d'authentification";
                 if (data && data.message) {
@@ -73,7 +80,7 @@ const LoginForm = () => {
                 }
                 dispatch(setError(errorMessage));
             }
-        } catch (error: React.MouseEvent<HTMLButtonElement>) {
+        } catch (error: any) {
             dispatch(setError(error.message || 'Erreur de connexion'));
         } finally {
             setLoading(false);

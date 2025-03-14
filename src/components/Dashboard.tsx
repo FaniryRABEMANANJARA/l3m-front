@@ -8,12 +8,17 @@ import {
     faUser
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import dayjs from 'dayjs';
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
+import "datatables.net";
+import "datatables.net-dt/css/jquery.dataTables.css";
+import $ from "jquery";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2'; // Utilisation de Chart.js avec react-chartjs-2
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+// Enregistrer les composants nécessaires, y compris LineElement
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     const dispatch = useDispatch();
@@ -58,59 +63,74 @@ const Dashboard = () => {
     const [chartData, setChartData] = useState(null);
     const [error, setError] = useState(null); // État pour l'erreur
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
+    const userId = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.user?.id);
+    const tableRef = useRef(null);
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            console.error('Aucun token trouvé !');
-            return; // Arrêtez l'exécution si le token n'est pas disponible
+            console.error('Token absent !');
+            return;
         }
 
-        fetch(`${process.env.NEXT_PUBLIC_LARAVEL_API_ENDPOINT}/transactions`, {
+
+        fetch(`${process.env.NEXT_PUBLIC_LARAVEL_API_ENDPOINT}/transactions/${userId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         })
-        .then((response) => response.json())
-        .then((data) => {
-            setTransactions(data);
-            setError(null); // Réinitialiser l'erreur si la récupération réussit
+            .then((response) => response.json())
+            .then((data) => {
+                setTransactions(data);
+                setError(null);
 
-            const dates = data.map(transaction => transaction.created_at.split(' ')[0]); // Extraire les dates
-            const deposits = data
-                .filter(transaction => transaction.type === 'deposit')
-                .map(transaction => parseFloat(transaction.amount));
-            const withdrawals = data
-                .filter(transaction => transaction.type === 'withdrawal')
-                .map(transaction => parseFloat(transaction.amount));
+                const dates = data.map(transaction => transaction.created_at.split(' ')[0]);
+                const deposits = data.filter(transaction => transaction.type === 'deposit')
+                    .map(transaction => parseFloat(transaction.amount));
+                const withdrawals = data.filter(transaction => transaction.type === 'withdrawal')
+                    .map(transaction => parseFloat(transaction.amount));
 
-            setChartData({
-                labels: [...new Set(dates)], // Labels uniques des dates
-                datasets: [
-                    {
-                        label: 'Dépôts',
-                        data: dates.map(date => deposits.filter((_, index) => dates[index] === date).reduce((a, b) => a + b, 0)),
-                        borderColor: 'green',
-                        backgroundColor: 'rgba(0, 255, 0, 0.2)',
-                        fill: true,
-                    },
-                    {
-                        label: 'Retraits',
-                        data: dates.map(date => withdrawals.filter((_, index) => dates[index] === date).reduce((a, b) => a + b, 0)),
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                        fill: true,
-                    },
-                ],
+                setChartData({
+                    labels: [...new Set(dates)],
+                    datasets: [
+                        {
+                            label: 'Dépôts',
+                            data: dates.map(date => deposits.filter((_, index) => dates[index] === date).reduce((a, b) => a + b, 0)),
+                            borderColor: 'green',
+                            backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                            fill: true,
+                            pointRadius: 5, 
+                        },
+                        {
+                            label: 'Retraits',
+                            data: dates.map(date => withdrawals.filter((_, index) => dates[index] === date).reduce((a, b) => a + b, 0)),
+                            borderColor: 'red',
+                            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                            fill: true,
+                            pointRadius: 5, 
+                        },
+                    ],
+                });
+            })
+            .catch((error) => {
+                setError('Erreur de récupération des transactions');
+                console.error('Error fetching transactions:', error);
             });
-        })
-        .catch((error) => {
-            setError('Erreur de récupération des transactions');
-            console.error('Error fetching transactions:', error);
-        });
-    }, []);
-
+        }, []);
+        useEffect(() => {
+            if (transactions.length > 0) {
+                const table = tableRef.current;
+                if (table) {
+                    $(table).DataTable({
+                        paging: true,
+                        searching: true,
+                        ordering: true,
+                        info: true,
+                        lengthChange: true,
+                    }); 
+                }
+            }
+        }, [transactions]);
     return (
         <div className="flex min-h-screen bg-gray-100">
             <Sidebar isOpen={sidebarOpen} />
@@ -130,7 +150,7 @@ const Dashboard = () => {
                     {error && <div className="text-red-600">{error}</div>} {/* Affichage de l'erreur */}
 
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h1 className="text-2xl font-bold text-gray-800 mb-4">Tableau de bord des Transactions</h1>
+                        <h1 className="text-2xl font-bold text-gray-800 mb-4"></h1>
 
                         <div>
                             <h2>Transactions par jour</h2>
@@ -169,30 +189,34 @@ const Dashboard = () => {
                         </div>
 
                         <h2>Détails des Transactions</h2>
-                        <table className="table-auto w-full border-collapse border border-gray-200">
-                            <thead>
-                                <tr className="bg-blue-600 text-white">
-                                    <th className="p-3">ID</th>
-                                    <th className="p-3">Envoyeur</th>
-                                    <th className="p-3">Receveur</th>
-                                    <th className="p-3">Montant</th>
-                                    <th className="p-3">Type</th>
-                                    <th className="p-3">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {transactions.map((transaction) => (
-                                    <tr key={transaction.id} className="border-b hover:bg-gray-100">
-                                        <td className="p-3">{transaction.id}</td>
-                                        <td className="p-3">{transaction.sender}</td>
-                                        <td className="p-3">{transaction.receiver}</td>
-                                        <td className="p-3">{transaction.amount}</td>
-                                        <td className="p-3">{transaction.type}</td>
-                                        <td className="p-3">{dayjs(transaction.created_at).format('DD/MM/YYYY')}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        {transactions.length === 0 ? (
+                <div>Chargement des transactions...</div> // Message de chargement
+            ) : (
+                <table ref={tableRef} className="table-auto w-full border-collapse border border-gray-200">
+                    <thead>
+                        <tr className="bg-blue-600 text-white">
+                            <th className="p-3">ID</th>
+                            <th className="p-3">Envoyeur</th>
+                            <th className="p-3">Receveur</th>
+                            <th className="p-3">Montant</th>
+                            <th className="p-3">Type</th>
+                            <th className="p-3">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {transactions.map((transaction) => (
+                            <tr key={transaction.id} className="border-b hover:bg-gray-100">
+                                <td className="p-3">{transaction.id}</td>
+                                <td className="p-3">{transaction.sender_name}</td>
+                                <td className="p-3">{transaction.receiver_name}</td>
+                                <td className="p-3">{transaction.amount}</td>
+                                <td className="p-3">{transaction.type}</td>
+                                <td className="p-3">{new Date(transaction.created_at).toLocaleDateString()}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
                     </div>
                 </main>
 
