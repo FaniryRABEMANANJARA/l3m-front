@@ -13,7 +13,18 @@ interface User {
   name: string;
   email: string;
 }
-
+interface RootState {
+  auth: {
+      token: string | null;
+      error: string | null;
+      user: {
+          id: string;
+          email: string;
+          name: string;
+          balance: number;
+      } | null;
+  };
+}
 const Sidebar = ({ isOpen }: { isOpen: boolean; }) => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -63,9 +74,9 @@ const Sidebar = ({ isOpen }: { isOpen: boolean; }) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>('');
     const [newEmail, setNewEmail] = useState<string>('');
-    const token = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.token);
-    const userId = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.user?.id);
-    const router = useRouter();
+    const token = useSelector((state: RootState) => state.auth.token);
+    const userId = useSelector((state: RootState) => state.auth.user?.id);
+const router = useRouter();
   
     useEffect(() => {
       const fetchProfile = async () => {
