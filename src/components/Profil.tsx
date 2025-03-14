@@ -98,11 +98,16 @@ const router = useRouter();
           setUser(data);
           setNewName(data.name);
           setNewEmail(data.email);
-        } catch (err: React.MouseEvent<HTMLButtonElement>) {
-          setError(err.message || 'Erreur de connexion');
-        } finally {
+        } catch (err: Error | unknown) {
+          if (err instanceof Error) {
+              setError(err.message || 'Erreur de connexion');
+          } else {
+              setError('Une erreur inconnue est survenue');
+              console.error('Unknown error:', err);
+          }
+      } finally {
           setLoading(false);
-        }
+      }
       };
   
       if (token && userId) {
@@ -133,9 +138,14 @@ const router = useRouter();
         const updatedUser = await response.json();
         setUser(updatedUser);
         setModalOpen(false); // Fermer la modal après sauvegarde
-      } catch (err: React.MouseEvent<HTMLButtonElement>) {
-        setError(err.message || 'Erreur lors de la mise à jour');
-      }
+      } catch (err: Error | unknown) {
+        if (err instanceof Error) {
+            setError(err.message || 'Erreur lors de la mise à jour');
+        } else {
+            setError('Une erreur inconnue est survenue');
+            console.error('Unknown error:', err);
+        }
+    }
     };
   
     if (loading) {

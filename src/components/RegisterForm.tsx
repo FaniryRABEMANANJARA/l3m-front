@@ -6,7 +6,11 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../app/globals.css';
-
+interface RootState {
+    auth: {
+        error: string | null;
+    };
+}
 const RegisterForm = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -17,7 +21,7 @@ const RegisterForm = () => {
     const router = useRouter();
 
     // Récupérer l'erreur depuis le store
-    const errorMessage = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.error);
+    const errorMessage = useSelector((state: RootState) => state.auth.error);
 
     useEffect(() => {
         document.querySelector<HTMLInputElement>('input[type="text"]')?.focus(); 
@@ -55,7 +59,7 @@ const RegisterForm = () => {
         }
 
         setLoading(true);
-        dispatch(setError(null));
+        dispatch(setError('null'));
 
         try {
             const response = await fetch(
@@ -81,8 +85,13 @@ const RegisterForm = () => {
                 }
                 dispatch(setError(errorMessage));
             }
-        } catch (error: React.MouseEvent<HTMLButtonElement>) {
-            dispatch(setError(error.message || 'Erreur de connexion'));
+        } catch (error: Error | unknown) { // Typage correct de l'erreur
+            if (error instanceof Error) {
+                dispatch(setError(error.message || 'Erreur de connexion'));
+            } else {
+                dispatch(setError("Une erreur inconnue est survenue"));
+                console.error("Unknown error:", error);
+            }
         } finally {
             setLoading(false);
         }
