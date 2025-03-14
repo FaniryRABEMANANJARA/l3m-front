@@ -51,7 +51,7 @@ interface RootState {
 interface Transaction {
   created_at: string;
   type: "deposit" | "withdrawal";
-  amount: number;
+  amount: string;
 }
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
