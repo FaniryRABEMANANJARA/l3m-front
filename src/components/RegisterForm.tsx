@@ -85,12 +85,12 @@ const RegisterForm = () => {
                 }
                 dispatch(setError(errorMessage));
             }
-        } catch (error: Error | unknown) { // Typage correct de l'erreur
-            if (error instanceof Error) {
-                dispatch(setError(error.message || 'Erreur de connexion'));
+        } catch (err: unknown) { // Typage correct de l'erreur
+            if (err instanceof Error) {
+                dispatch(setError(err.message || 'Erreur de connexion'));
             } else {
                 dispatch(setError("Une erreur inconnue est survenue"));
-                console.error("Unknown error:", error);
+                console.error("Unknown error:", err);
             }
         } finally {
             setLoading(false);

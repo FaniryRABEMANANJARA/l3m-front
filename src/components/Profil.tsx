@@ -98,7 +98,7 @@ const router = useRouter();
           setUser(data);
           setNewName(data.name);
           setNewEmail(data.email);
-        } catch (err: Error | unknown) {
+        } catch (err: unknown) {
           if (err instanceof Error) {
               setError(err.message || 'Erreur de connexion');
           } else {
@@ -138,7 +138,7 @@ const router = useRouter();
         const updatedUser = await response.json();
         setUser(updatedUser);
         setModalOpen(false); // Fermer la modal après sauvegarde
-      } catch (err: Error | unknown) {
+      } catch (err: unknown) {
         if (err instanceof Error) {
             setError(err.message || 'Erreur lors de la mise à jour');
         } else {
