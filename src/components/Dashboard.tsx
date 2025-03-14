@@ -10,6 +10,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     CategoryScale,
+    ChartData,
     Chart as ChartJS,
     Legend,
     LinearScale,
@@ -49,10 +50,13 @@ interface RootState {
 }
 
 interface Transaction {
-  created_at: string;
-  type: "deposit" | "withdrawal";
-  amount: string;
-}
+    id: number;
+    created_at: string;
+    type: "deposit" | "withdrawal";
+    amount: string;
+    sender_name: string;
+    receiver_name: string;
+  }
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
   const dispatch = useDispatch();
@@ -108,82 +112,95 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     </aside>
   );
 };
-
+interface ChartDataState extends ChartData<'line'> {
+    labels: string[];
+    datasets: {
+        label: string;
+        data: number[];
+        borderColor: string;
+        backgroundColor: string;
+        fill: boolean;
+        pointRadius: number;
+    }[];
+}
 const Dashboard = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [chartData, setChartData] = useState(null);
-  const [error, setError] = useState(null); // État pour l'erreur
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const userId = useSelector((state: RootState) => state.auth.user?.id);
-  const tableRef = useRef(null);
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token absent !");
-      return;
-    }
-
-    fetch(
-      `${process.env.NEXT_PUBLIC_LARAVEL_API_ENDPOINT}/transactions/${userId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    const [transactions, setTransactions] = useState<Transaction[]>([]); // Typage de transactions
+    const [chartData, setChartData] =useState<ChartDataState | null>(null);
+    const [error, setError] = useState(null);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const userId = useSelector((state: RootState) => state.auth.user?.id);
+    const tableRef = useRef(null);
+  
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Token absent !");
+        return;
       }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setTransactions(data);
-        setError(null);
-        const dates = data.map(
-          (transaction: Transaction) => transaction.created_at.split(" ")[0]
-        );
-
-        const deposits = data
-          .filter((transaction: Transaction) => transaction.type === "deposit")
-          .map((transaction: Transaction) => parseFloat(transaction.amount));
-
-        const withdrawals = data
-          .filter(
-            (transaction: Transaction) => transaction.type === "withdrawal"
-          )
-          .map((transaction: Transaction) => parseFloat(transaction.amount));
-        setChartData({
-          labels: [...new Set(dates)],
-          datasets: [
-            {
-              label: "Dépôts",
-              data: dates.map((date) =>
-                deposits
-                  .filter((_, index) => dates[index] === date)
-                  .reduce((a, b) => a + b, 0)
-              ),
-              borderColor: "green",
-              backgroundColor: "rgba(0, 255, 0, 0.2)",
-              fill: true,
-              pointRadius: 5,
-            },
-            {
-              label: "Retraits",
-              data: dates.map((date) =>
-                withdrawals
-                  .filter((_, index) => dates[index] === date)
-                  .reduce((a, b) => a + b, 0)
-              ),
-              borderColor: "red",
-              backgroundColor: "rgba(255, 0, 0, 0.2)",
-              fill: true,
-              pointRadius: 5,
-            },
-          ],
+  
+      fetch(
+        `${process.env.NEXT_PUBLIC_LARAVEL_API_ENDPOINT}/transactions/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data: Transaction[]) => { // Typage de data
+          setTransactions(data);
+          setError(null);
+  
+          const dates = data.map(
+            (transaction: Transaction) => transaction.created_at.split(" ")[0]
+          );
+  
+          const deposits = data
+            .filter((transaction: Transaction) => transaction.type === "deposit")
+            .map((transaction: Transaction) => parseFloat(transaction.amount));
+  
+          const withdrawals = data
+            .filter(
+              (transaction: Transaction) => transaction.type === "withdrawal"
+            )
+            .map((transaction: Transaction) => parseFloat(transaction.amount));
+  
+          setChartData({
+            labels: [...new Set(dates)],
+            datasets: [
+              {
+                label: "Dépôts",
+                data: dates.map((date) =>
+                  deposits
+                    .filter((_, index) => dates[index] === date)
+                    .reduce((a, b) => a + b, 0)
+                ),
+                borderColor: "green",
+                backgroundColor: "rgba(0, 255, 0, 0.2)",
+                fill: true,
+                pointRadius: 5,
+              },
+              {
+                label: "Retraits",
+                data: dates.map((date) =>
+                  withdrawals
+                    .filter((_, index) => dates[index] === date)
+                    .reduce((a, b) => a + b, 0)
+                ),
+                borderColor: "red",
+                backgroundColor: "rgba(255, 0, 0, 0.2)",
+                fill: true,
+                pointRadius: 5,
+              },
+            ],
+          });
+        })
+        .catch((error) => {
+          setError("Erreur de récupération des transactions");
+          console.error("Error fetching transactions:", error);
         });
-      })
-      .catch((error) => {
-        setError("Erreur de récupération des transactions");
-        console.error("Error fetching transactions:", error);
-      });
-  }, []);
+    }, [userId]);
   useEffect(() => {
     if (transactions.length > 0) {
       const table = tableRef.current;
