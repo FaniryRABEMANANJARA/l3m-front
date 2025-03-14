@@ -122,7 +122,7 @@ const Transactions: React.FC = () => {
           throw new Error('Erreur lors du chargement des utilisateurs');
         }
 
-        setUsers(data.data || []); // Assurez-vous que c'est bien data.data
+        setUsers(data.data || []); 
       } catch (error) {
         console.error('Erreur de récupération des utilisateurs :', error);
       }
@@ -316,7 +316,7 @@ const Transactions: React.FC = () => {
             {showTransactionModal && (
               <div
                 className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-                onClick={() => setShowTransactionModal(false)}             >
+   onClick={() => setShowTransactionModal(false)}             >
                 <div
                   className="bg-white p-6 rounded-lg shadow-lg max-w-md"
                   onClick={(e) => e.stopPropagation()}
