@@ -1,3 +1,5 @@
+'use client';
+
 import Footer from '@/components/Footer';
 import { clearAuth } from '@/store/authSlice';
 import {
