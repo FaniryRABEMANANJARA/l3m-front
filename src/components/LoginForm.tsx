@@ -4,6 +4,19 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../app/globals.css';
 
+// Définir l'interface pour le state global
+interface RootState {
+    auth: {
+        token: string | null;
+        error: string | null;
+        user: {
+            id: string;
+            email: string;
+            name: string;
+        } | null;
+    };
+}
+
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -11,18 +24,15 @@ const LoginForm = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    // Récupérer l'erreur depuis le store Redux
-    const errorMessage = useSelector((state: any) => state.auth.error);  // Remplacez "any" par le type de votre RootState
+    // Utiliser le type défini pour accéder à l'erreur
+    const errorMessage = useSelector((state: RootState) => state.auth.error);  // Remplacez `any` par `RootState`
 
     useEffect(() => {
-        // Vérifier si un token est déjà présent dans localStorage et l'utiliser
         const token = localStorage.getItem('token');
         if (token) {
             dispatch(setToken(token));
-            // Ici, tu pourrais aussi récupérer et stocker les informations utilisateur, si nécessaire
         }
 
-        // Mettre le focus sur le champ email à l'initialisation du formulaire
         document.querySelector<HTMLInputElement>('input[type="email"]')?.focus();
     }, [dispatch]);
 
@@ -66,12 +76,10 @@ const LoginForm = () => {
                 const token = data.access_token;
                 const user = data.user;
 
-                // Stocker le token dans localStorage
                 localStorage.setItem("token", token);
                 dispatch(setToken(token));
                 dispatch(setUser(user));
 
-                // Rediriger vers la page des transactions
                 router.push("/transactions");
             } else {
                 let errorMessage = "Erreur d'authentification";
