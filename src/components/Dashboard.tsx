@@ -19,7 +19,17 @@ import { Line } from 'react-chartjs-2'; // Utilisation de Chart.js avec react-ch
 import { useDispatch, useSelector } from 'react-redux';
 // Enregistrer les composants nécessaires, y compris LineElement
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
+interface RootState {
+    auth: {
+        token: string | null;
+        error: string | null;
+        user: {
+            id: string;
+            email: string;
+            name: string;
+        } | null;
+    };
+}
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -63,7 +73,7 @@ const Dashboard = () => {
     const [chartData, setChartData] = useState(null);
     const [error, setError] = useState(null); // État pour l'erreur
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const userId = useSelector((state: React.MouseEvent<HTMLButtonElement>) => state.auth.user?.id);
+    const userId = useSelector((state: RootState) => state.auth.user?.id);
     const tableRef = useRef(null);
     useEffect(() => {
         const token = localStorage.getItem('token');
