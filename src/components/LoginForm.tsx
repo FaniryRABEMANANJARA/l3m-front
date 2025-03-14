@@ -58,7 +58,7 @@ const LoginForm = () => {
         }
 
         setLoading(true);
-        dispatch(setError(null));
+        dispatch(setError('null'));
 
         try {
             const response = await fetch(
