@@ -88,7 +88,7 @@ const LoginForm = () => {
 
             router.push("/transactions");
 
-        } catch (error) { // Type 'unknown' est plus sûr que 'any'
+        } catch (error) { 
             if (error instanceof Error) {
                 dispatch(setError(error.message || 'Erreur de connexion'));
             } else {

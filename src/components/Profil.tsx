@@ -8,6 +8,7 @@ import { clearAuth } from '../store/authSlice';
 import ErrorMessage from './ErrorMessage';
 import Loader from './Loader';
 
+
 interface User {
   id: number;
   name: string;
@@ -28,7 +29,6 @@ interface RootState {
 const Sidebar = ({ isOpen }: { isOpen: boolean; }) => {
     const dispatch = useDispatch();
     const router = useRouter();
-  
     // Fonction de déconnexion
     const handleLogout = () => {   
       dispatch(clearAuth());     
@@ -166,7 +166,7 @@ const router = useRouter();
   
     return (
       <div className="flex min-h-screen bg-gray-100">
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+       <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
   
         <div className="flex-1 flex flex-col">
           <nav className="bg-white shadow-md p-4 flex justify-between items-center">
